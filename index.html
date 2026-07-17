@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUB - Proud United Bros | Kingshot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        },
+                        tavern: {
+                            50: '#f5f5f4',
+                            100: '#e7e5e4',
+                            200: '#d6d3d1',
+                            300: '#a8a29e',
+                            400: '#78716c',
+                            500: '#57534e',
+                            600: '#44403c',
+                            700: '#292524',
+                            800: '#1c1917',
+                            900: '#0c0a09',
+                            950: '#050404',
+                        }
+                    },
+                    fontFamily: {
+                        accent: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .pub-bg {
+            background-color: #0c0a09;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(217, 119, 6, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(180, 83, 9, 0.1) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f59e0b' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+        
+        .glass-panel {
+            background: rgba(12, 10, 9, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        }
+
+        .amber-glow {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(5, 4, 4, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #b45309;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+    </style>
+</head>
+<body class="pub-bg text-slate-100 min-h-screen font-sans selection:bg-amber-600 selection:text-white">
+
+    <!-- MODAL DE ERRO CRÍTICO -->
+    <div id="modal-erro-critico" class="hidden fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-lg">
+        <div class="glass-panel rounded-2xl w-full max-w-md overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.4)] border-2 border-red-500/50">
+            <div class="bg-gradient-to-r from-red-950 via-red-900 to-red-950 p-5 border-b border-red-500/30 flex items-center gap-3">
+                <i class="fa-solid fa-triangle-exclamation text-red-400 text-2xl animate-pulse"></i>
+                <h3 class="font-accent font-black text-red-200 uppercase tracking-widest text-sm">
+                    Falta de Cerveja no Estoque (Falha Crítica)
+                </h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-xs text-slate-300 leading-relaxed text-center normal-case">
+                    Não foi possível encontrar barris de dados essenciais no repositório. A porta da taverna foi bloqueada para evitar confusão.
+                </p>
+                <div class="bg-black/40 p-4 rounded-lg border border-red-900/50 space-y-2">
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-mono">Barris Inspecionados:</p>
+                    <ul class="text-[11px] font-mono space-y-1" id="lista-erros-arquivos"></ul>
+                </div>
+                <p class="text-[10px] text-red-400 font-bold tracking-wider text-center uppercase italic">
+                    "Traga as planilhas corretas para que possamos voltar a brindar."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <header class="relative border-b border-amber-900/50 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-tavern-950 via-tavern-900/90 to-tavern-950 opacity-95"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 py-12 relative z-10 flex flex-col items-center justify-center text-center">
+            
+            <div class="relative w-24 h-24 md:w-28 md:h-28 rounded-full border border-amber-500 flex items-center justify-center bg-tavern-950 amber-glow mb-6 overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-900/40 via-transparent to-transparent"></div>
+                <i class="fa-solid fa-beer-mug-empty text-4xl md:text-5xl text-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.8)] z-10"></i>
+            </div>
+            
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-wheat-awn text-amber-500 text-sm"></i>
+                <i class="fa-solid fa-wheat-awn text-amber-500 text-sm"></i>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-accent font-black tracking-[0.1em] text-transparent bg-clip-text bg-gradient-to-b from-white via-amber-200 to-amber-500 uppercase drop-shadow-lg">
+                PUB
+            </h1>
+            
+            <h2 class="text-sm md:text-lg font-accent tracking-[0.3em] text-tavern-200 mt-3 uppercase font-semibold">
+                Proud United Bros
+            </h2>
+
+            <div class="w-full max-w-lg mt-6 mb-8 flex items-center justify-center">
+                <div class="h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent flex-1"></div>
+                <span class="px-5 font-accent text-xs md:text-sm tracking-widest text-amber-500 uppercase font-bold drop-shadow-[0_0_5px_rgba(245,158,11,0.5)]">
+                    Brotherhood & Beer
+                </span>
+                <div class="h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent flex-1"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 glass-panel px-6 py-3 rounded-full mt-2">
+                <div class="text-center sm:text-left">
+                    <div id="status-permissao" class="flex items-center justify-center sm:justify-start gap-2 text-xs font-bold text-tavern-300 tracking-wider uppercase">
+                        <i class="fa-solid fa-lock"></i> Acesso Restrito (Leitura)
+                    </div>
+                </div>
+                <div class="h-8 w-px bg-amber-900/40 hidden sm:block"></div>
+                <div class="flex items-center gap-6">
+                    <div class="text-center sm:text-left">
+                        <span class="block text-[9px] text-slate-400 uppercase tracking-widest">Sócios no Bar (ON)</span>
+                        <span id="header-total-membros" class="text-lg font-black font-accent text-amber-400 leading-tight">0</span>
+                    </div>
+                    <button id="btn-toggle-admin" onclick="abrirModalSenha()" class="bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 border border-amber-500/30 text-white text-[10px] uppercase tracking-wider font-bold py-2 px-4 rounded-full flex items-center gap-2 transition-all shadow-lg hover:shadow-amber-500/20">
+                        <i class="fa-solid fa-key"></i> <span>Chave da Taverna</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-10 border-b border-tavern-800/50 pb-5">
+            <button onclick="switchTab('mural-alianca')" id="btn-mural-alianca" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-gradient-to-b from-amber-600 to-amber-800 text-white shadow-[0_0_15px_rgba(245,158,11,0.2)] border border-amber-500/50">
+                <i class="fa-solid fa-clipboard-list text-lg"></i>
+                <span>Quadro de Avisos</span>
+            </button>
+            <button onclick="switchTab('informacoes-gerais')" id="btn-informacoes-gerais" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span>Visão do PUB</span>
+            </button>
+            <button onclick="switchTab('nap7')" id="btn-nap7" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-handshake-angle text-lg text-amber-500"></i>
+                <span class="text-amber-200">NAP</span>
+            </button>
+            <button onclick="switchTab('base-detalhada')" id="btn-base-detalhada" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-book-open text-lg"></i>
+                <span>Registros</span>
+            </button>
+            <button onclick="switchTab('controle-activity')" id="btn-controle-activity" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-address-card text-lg"></i>
+                <span>Ficha Individual</span>
+            </button>
+            <button onclick="switchTab('simulacao')" id="btn-simulacao" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-flask text-lg text-amber-500"></i>
+                <span class="text-amber-200">Simular</span>
+            </button>
+            <button onclick="switchTab('controle-eventos')" id="btn-controle-eventos" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30">
+                <i class="fa-solid fa-calendar-days text-lg"></i>
+                <span>Eventos</span>
+            </button>
+            <button onclick="switchTab('ferramentas-dados')" id="btn-ferramentas-dados" class="tab-btn px-6 py-3 rounded-lg font-semibold text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 bg-tavern-900/60 text-slate-300 hover:bg-tavern-800 border border-tavern-700/30 md:ml-auto">
+                <i class="fa-solid fa-database text-lg"></i>
+                <span>Sinc</span>
+            </button>
+        </div>
+
+
+        <section id="tab-mural-alianca" class="space-y-6">
+            <div class="glass-panel p-8 rounded-2xl border-l-4 border-l-amber-500 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 text-[12rem] text-amber-500/5 rotate-12 pointer-events-none">
+                    <i class="fa-solid fa-clipboard"></i>
+                </div>
+                
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-amber-900/40 relative z-10">
+                    <i class="fa-solid fa-clipboard-list text-amber-500 text-2xl drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"></i>
+                    <div>
+                        <h2 class="text-2xl font-accent font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-amber-500 uppercase tracking-widest leading-tight">
+                            Quadro de Avisos da Taverna
+                        </h2>
+                        <p class="text-[11px] text-slate-400 uppercase tracking-wider font-mono mt-1">
+                            Anotações trazidas via <strong class="text-amber-300">mural.txt</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="mural-mensagens-conteudo" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+                    <div class="col-span-full py-20 flex flex-col items-center justify-center text-center space-y-4">
+                        <i class="fa-solid fa-beer-mug-empty text-tavern-700 text-4xl animate-pulse pointer-events-none"></i>
+                        <p class="text-slate-500 text-xs font-serif italic max-w-sm">
+                            Buscando as regras no mural de cortiça...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="tab-informacoes-gerais" class="hidden space-y-8">
+            <div id="filtro-info-banner" class="bg-tavern-900/60 border border-amber-500/30 p-4 rounded-lg text-xs text-tavern-200 flex items-center gap-3 font-mono shadow-[0_0_10px_rgba(245,158,11,0.05)]">
+                <i class="fa-solid fa-circle-info text-amber-500 text-lg"></i>
+                <span>Status da confraria baseado na <strong>auditoria mais recente (<span id="span-auditoria-data">Nenhum registro</span>)</strong> para os irmãos atualmente <strong>Ativos no bar (ON)</strong>.</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-amber-500/50 transition-all">
+                    <div class="absolute -right-2 -bottom-2 opacity-5 text-amber-500 text-7xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Média de Poder</span>
+                    <span id="metric-media-poder" class="text-3xl font-black text-white mt-1 block font-mono">0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase tracking-wide">Da última contagem</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-amber-500/50 transition-all">
+                    <div class="absolute -right-2 -bottom-2 opacity-5 text-amber-500 text-7xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Contribuição Semanal Média</span>
+                    <span id="metric-media-doacao" class="text-3xl font-black text-amber-500 mt-1 block font-mono">0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase tracking-wide">Contribuição à guilda</span>
+                </div>
+
+                <div class="glass-panel border-red-900/40 hover:border-red-500/50 p-5 rounded-xl relative overflow-hidden group transition-all">
+                    <div class="absolute -right-2 -bottom-2 opacity-5 text-red-500 text-7xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-ban"></i>
+                    </div>
+                    <span class="text-[10px] text-red-400 uppercase font-bold tracking-widest block flex items-center gap-1">
+                        Linha de Corte <span class="text-[9px] bg-red-950/80 text-red-300 border border-red-900 px-1.5 py-0.5 rounded">70%</span>
+                    </span>
+                    <span id="metric-nota-corte" class="text-3xl font-black text-red-400 mt-1 block font-mono">0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase tracking-wide">Poder mínimo exigido</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-emerald-500/50 transition-all">
+                    <div class="absolute -right-2 -bottom-2 opacity-5 text-emerald-500 text-7xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-thumbs-up"></i>
+                    </div>
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Aprovação</span>
+                    <span id="metric-cumprem-corte" class="text-3xl font-black text-emerald-500 mt-1 block font-mono">0%</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase tracking-wide">Membros acima do corte</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-amber-300/50 transition-all">
+                    <div class="absolute -right-2 -bottom-2 opacity-5 text-amber-300 text-7xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Irmandade Ativa</span>
+                    <span id="metric-ativos-on" class="text-3xl font-black text-amber-300 mt-1 block font-mono">0 / 0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase tracking-wide">Irmãos de copo (ON)</span>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-accent font-black text-amber-500 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-medal"></i> Quadro de Sócios (Ranking Interno)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Status na taverna baseado em Poder e Contribuição relativos à média.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-[9px] uppercase font-bold bg-tavern-950/80 p-2 rounded-lg border border-tavern-800/50 shadow-inner">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]"></span> Lendas do Bar</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_5px_#3b82f6]"></span> Clientes Fiéis</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_5px_#f97316]"></span> Devedores</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]"></span> Bebados Caídos</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-5 hover:bg-emerald-900/30 hover:border-emerald-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-3 border-b border-emerald-500/20 pb-2">
+                            <span class="font-accent text-sm font-bold text-emerald-500 tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-crown"></i> 1. Lendas do Bar
+                            </span>
+                            <span id="quad-alta-count" class="bg-emerald-500 text-black text-xs font-black px-2.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]">0</span>
+                        </div>
+                        <p class="text-[10px] text-emerald-300/60 mb-4 font-mono uppercase tracking-wider">Poder Alto & Conta Paga (Doação Alta)</p>
+                        <div id="list-alta-performance" class="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-2 text-xs"></div>
+                    </div>
+
+                    <div class="bg-blue-950/20 border border-blue-500/20 rounded-xl p-5 hover:bg-blue-900/30 hover:border-blue-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-3 border-b border-blue-500/20 pb-2">
+                            <span class="font-accent text-sm font-bold text-blue-500 tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-trend-up"></i> 2. Clientes Fiéis (Evoluindo)
+                            </span>
+                            <span id="quad-potencial-count" class="bg-blue-500 text-white text-xs font-black px-2.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]">0</span>
+                        </div>
+                        <p class="text-[10px] text-blue-300/60 mb-4 font-mono uppercase tracking-wider">Poder Menor, mas Ajudam Sempre (Doação Alta)</p>
+                        <div id="list-potencial-crescimento" class="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-2 text-xs"></div>
+                    </div>
+
+                    <div class="bg-orange-950/20 border border-orange-500/20 rounded-xl p-5 hover:bg-orange-900/30 hover:border-orange-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-3 border-b border-orange-500/20 pb-2">
+                            <span class="font-accent text-sm font-bold text-orange-500 tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-hand-holding-dollar"></i> 3. Devedores 
+                            </span>
+                            <span id="quad-doacao-count" class="bg-orange-500 text-black text-xs font-black px-2.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(249,115,22,0.5)]">0</span>
+                        </div>
+                        <p class="text-[10px] text-orange-300/60 mb-4 font-mono uppercase tracking-wider">Poder Alto, mas Não Pagam a Conta (Doação Baixa)</p>
+                        <div id="list-baixa-doacao" class="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-2 text-xs"></div>
+                    </div>
+
+                    <div class="bg-rose-950/20 border border-rose-500/20 rounded-xl p-5 hover:bg-rose-900/30 hover:border-rose-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-3 border-b border-rose-500/20 pb-2">
+                            <span class="font-accent text-sm font-bold text-rose-500 tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-skull-crossbones"></i> 4. Bêbados Caídos
+                            </span>
+                            <span id="quad-atividade-count" class="bg-rose-500 text-white text-xs font-black px-2.5 py-0.5 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.5)]">0</span>
+                        </div>
+                        <p class="text-[10px] text-rose-300/60 mb-4 font-mono uppercase tracking-wider">Pouco Poder & Baixa Contribuição</p>
+                        <div id="list-baixa-atividade" class="space-y-2 max-h-[160px] overflow-y-auto custom-scrollbar pr-2 text-xs"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- REGRAS DA TAVERNA -->
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden lg:col-span-2">
+                    <div class="absolute -right-10 -top-10 text-9xl text-amber-500/5 rotate-12 pointer-events-none">
+                        <i class="fa-solid fa-gavel"></i>
+                    </div>
+                    <h3 class="text-lg font-accent font-bold text-amber-500 uppercase tracking-wider mb-4 flex items-center gap-2 relative z-10">
+                        <i class="fa-solid fa-scroll"></i> Regras da Taverna (Decisões Estratégicas)
+                    </h3>
+                    <div class="space-y-4 text-sm text-slate-300 relative z-10">
+                        <div class="p-4 bg-tavern-950/60 border border-tavern-700/30 rounded-lg hover:border-amber-500/30 transition-colors">
+                            <strong class="text-amber-300 block text-[11px] tracking-widest uppercase mb-1">Porta de Entrada (Recrutamento)</strong>
+                            <p class="text-xs leading-relaxed">
+                                Ao avaliar novos entrantes, o Barman deve checar a <strong class="text-red-400 font-mono">Linha de Corte (<span class="corte-span">0</span>)</strong>. Quem não alcança isso, não aguenta a pressão do nosso bar.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-tavern-950/60 border border-tavern-700/30 rounded-lg hover:border-amber-500/30 transition-colors">
+                            <strong class="text-amber-300 block text-[11px] tracking-widest uppercase mb-1">Hora de Fechar (Expulsão)</strong>
+                            <p class="text-xs leading-relaxed">
+                                Irmãos classificados como <strong class="text-rose-400">Bêbados Caídos (Q4)</strong> com ausência contínua devem ser convidados a sair. Precisamos de cadeiras livres para guerreiros dispostos.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-tavern-950/60 border border-tavern-700/30 rounded-lg hover:border-amber-500/30 transition-colors">
+                            <strong class="text-amber-300 block text-[11px] tracking-widest uppercase mb-1">Cobrança de Dívidas</strong>
+                            <p class="text-xs leading-relaxed">
+                                Membros na lista de <strong class="text-orange-500">Devedores (Q3)</strong> são fortes, mas não ajudam a encher o barril da guilda. Merecem um puxão de orelha no chat.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COPOS VAZIOS -->
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-t-rose-600">
+                    <h3 class="text-lg font-accent font-bold text-rose-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-hourglass-empty"></i> Copos Vazios (Inativos)
+                    </h3>
+                    <div class="space-y-3">
+                        <p class="text-[11px] uppercase tracking-wide text-slate-400 mb-4">Irmãos ausentes da confraria:</p>
+                        <div id="lista-inativos" class="space-y-3 max-h-[250px] overflow-y-auto custom-scrollbar pr-2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="tab-nap7" class="hidden space-y-8">
+            <div class="glass-panel border-l-4 border-l-amber-500 p-6 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-2xl font-accent font-black tracking-[0.1em] text-amber-500 uppercase flex items-center gap-3">
+                        <i class="fa-solid fa-handshake"></i> Alianças de Balcão (NAP)
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-2">Comparativo da nossa força com outras guildas (lido via <strong class="text-amber-300 font-mono">alliances-compiled.json</strong> e a nossa força bruta).</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group border-amber-500/50 amber-glow">
+                    <div class="absolute -right-4 -bottom-4 opacity-10 text-amber-500 text-7xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <span class="text-[10px] text-amber-200 uppercase font-bold tracking-widest block">Nossa Posição </span>
+                    <span id="nap7-ranking-position" class="text-3xl font-black text-white mt-2 block font-accent">Ranking: --</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase">No bloco das alianças</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden">
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Força da PUB</span>
+                    <span id="nap7-thc-power" class="text-3xl font-black text-amber-500 mt-2 block font-mono">0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase">Poder Total Consolidado</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden">
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Irmãos Lançados (PUB)</span>
+                    <span id="nap7-thc-membros" class="text-3xl font-black text-emerald-500 mt-2 block font-mono">0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase">Na última chamada (ON)</span>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden">
+                    <span class="text-[10px] text-tavern-300 uppercase font-bold tracking-widest block">Base Média (PUB)</span>
+                    <span id="nap7-thc-cidade" class="text-3xl font-black text-blue-400 mt-2 block font-mono">Lv 0.0</span>
+                    <span class="text-[9px] text-slate-400 block mt-2 uppercase">Nível médio de castelo</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- CONCENTRAÇÃO DE PODER -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-accent font-bold text-amber-400 uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-beer-mug-empty"></i> Concentração de Força
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mb-6">Proporção dos Mestres Cervejeiros (Top 20) frente ao restante da taverna.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center py-4 relative">
+                        <div class="relative w-44 h-44">
+                            <svg class="w-full h-full transform -rotate-90 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)]" viewBox="0 0 42 42">
+                                <circle class="text-tavern-950" stroke-width="3" stroke="currentColor" fill="transparent" r="15.915" cx="21" cy="21"/>
+                                <circle id="donut-segment-top" class="text-amber-500 transition-all duration-1000 ease-out" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="0" stroke-linecap="round" stroke="currentColor" fill="transparent" r="15.915" cx="21" cy="21"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                <span id="donut-pct-text" class="text-3xl font-mono font-black text-white drop-shadow-md">0%</span>
+                                <span class="text-[9px] uppercase tracking-widest text-amber-200 mt-1">Do Poder</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 space-y-2.5 w-full text-xs font-mono uppercase tracking-wide">
+                            <div class="flex items-center justify-between p-2.5 bg-tavern-900/40 rounded-lg border border-tavern-700/50">
+                                <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_5px_#f59e0b]"></span> <strong>Top 20 Veteranos:</strong></span>
+                                <span id="donut-top-val" class="font-bold text-amber-200">0</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2.5 bg-tavern-900/40 rounded-lg border border-tavern-700/50">
+                                <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-600"></span> <strong>Restante:</strong></span>
+                                <span id="donut-resto-val" class="font-bold text-slate-300">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROBLEMAS NO ESTOQUE -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-accent font-bold text-rose-500 uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Problemas no Estoque
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mb-6">Fraquezas estruturais dentro da guilda, baseadas nas regras.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-5 bg-rose-950/30 border border-rose-900/50 rounded-xl hover:bg-rose-900/40 transition-all">
+                            <span class="text-[10px] uppercase font-bold text-rose-500 font-accent flex items-center gap-2 mb-2 tracking-wider">
+                                <i class="fa-solid fa-arrow-down-long"></i> Muito Fracos pro Bar
+                            </span>
+                            <p id="gargalo-poder-texto" class="text-sm font-semibold text-slate-200 font-mono">Irmãos &lt; 0M Poder: 0</p>
+                            <p class="text-[10px] text-slate-400 mt-2">Membros ativos cujo poder está abaixo da linha de corte estabelecida.</p>
+                        </div>
+
+                        <div class="p-5 bg-orange-950/30 border border-orange-900/50 rounded-xl hover:bg-orange-900/40 transition-all">
+                            <span class="text-[10px] uppercase font-bold text-orange-500 font-accent flex items-center gap-2 mb-2 tracking-wider">
+                                <i class="fa-solid fa-campground"></i> Bases Inadequadas
+                            </span>
+                            <p id="gargalo-cidade-texto" class="text-sm font-semibold text-slate-200 font-mono">Bases &lt; Lv 0: 0</p>
+                            <p class="text-[10px] text-slate-400 mt-2">Irmãos com castelo/cidade abaixo da média geral da aliança.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPARATIVO VISUAL -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-accent font-bold text-blue-400 uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-scale-balanced"></i> Abismo de Força (Gaps)
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mb-6">Comparação direta do nosso poder contra os top do NAP.</p>
+                    </div>
+
+                    <div id="gap-bars-container" class="space-y-5"></div>
+                </div>
+            </div>
+
+            <div class="space-y-4 pt-4">
+                <h3 class="text-xl font-accent font-black tracking-widest text-amber-500 uppercase flex items-center gap-3">
+                    <i class="fa-solid fa-shield-halved"></i> Guildas do Bloco NAP
+                </h3>
+                <div id="nap7-alliances-list" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </div>
+        </section>
+
+
+        <section id="tab-base-detalhada" class="hidden space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 glass-panel p-5 rounded-xl border-t-2 border-t-amber-500">
+                <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+                    <div class="relative w-full sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-amber-500 text-sm"></i>
+                        <input type="text" id="db-search" oninput="renderDatabaseTable()" placeholder="Buscar nome na conta..." class="w-full bg-tavern-950/80 border border-tavern-700/50 rounded-lg py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all font-mono">
+                    </div>
+                    <select id="db-filter-status" onchange="renderDatabaseTable()" class="bg-tavern-950/80 border border-tavern-700/50 rounded-lg py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-white focus:outline-none focus:border-amber-500 transition-all">
+                        <option value="todos">Histórico Completo</option>
+                        <option value="on">Ativos no Bar (ON)</option>
+                        <option value="off">Expulsos/Sumidos (OFF)</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+                    <button id="btn-novo-registro" onclick="toggleFormModal(true)" class="bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white uppercase tracking-wider font-bold px-5 py-3 rounded-lg text-[11px] flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-400/50" disabled>
+                        <i class="fa-solid fa-plus-circle text-sm"></i> Inserir Nova Conta
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl overflow-hidden shadow-2xl">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-tavern-950 via-tavern-900 to-tavern-950 text-amber-400 font-accent uppercase tracking-widest border-b border-tavern-700/50 text-[10px]">
+                                <th class="p-5 text-center">Gestão</th>
+                                <th class="p-5">Data Revisão</th>
+                                <th class="p-5">Irmão (Nick)</th>
+                                <th class="p-5">Cadeira (Rank)</th>
+                                <th class="p-5 text-right">Poder Total</th>
+                                <th class="p-5 text-center">Nível Base</th>
+                                <th class="p-5 text-center">Ausência (Dias)</th>
+                                <th class="p-5 text-center">Região</th>
+                                <th class="p-5">Iniciação (Gole)</th>
+                                <th class="p-5">Expulsão (Saída)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="db-table-body" class="divide-y divide-tavern-800/40"></tbody>
+                    </table>
+                </div>
+                <div class="bg-tavern-950/80 p-5 border-t border-tavern-800/60 flex items-center justify-between text-[11px] text-slate-400 uppercase tracking-wide">
+                    <div id="db-table-info" class="font-bold text-tavern-200">Mostrando 0 registros de 0</div>
+                    <div class="text-[9px] text-slate-500 font-mono">Dica: Múltiplas coletas acumulam histórico diário das estatísticas.</div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="tab-controle-activity" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-blue-500">
+                <h2 class="text-xl font-accent font-black text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-address-book"></i> Livro de Sócios (Avaliação Individual)
+                </h2>
+                <p class="text-xs text-slate-400 mb-6 leading-relaxed">
+                    Aqui vasculhamos o histórico de presença no bar. Avaliamos quantas vezes o irmão foi considerado "Lenda", "Fiel", "Devedor" ou "Bêbado Caído" através de todas as contagens salvas, criando um perfil da sua assiduidade.
+                </p>
+
+                <div class="bg-tavern-950/50 border border-tavern-800/50 rounded-xl overflow-hidden shadow-xl">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs min-w-[800px]">
+                            <thead>
+                                <tr class="bg-tavern-900/80 text-amber-300 font-accent uppercase tracking-widest border-b border-tavern-700/50 text-[10px]">
+                                    <th class="p-5">Irmão de Copo</th>
+                                    <th class="p-5 text-center bg-emerald-900/20 text-emerald-400">Lenda (Q1)</th>
+                                    <th class="p-5 text-center bg-blue-900/20 text-blue-400">Fiel (Q2)</th>
+                                    <th class="p-5 text-center bg-orange-900/20 text-orange-400">Devedor (Q3)</th>
+                                    <th class="p-5 text-center bg-rose-900/20 text-rose-400">Caído (Q4)</th>
+                                    <th class="p-5 text-center text-tavern-200">Aparições na Conta</th>
+                                    <th class="p-5 text-center">Status Hoje</th>
+                                    <th class="p-5 text-center">Veredito Viciante</th>
+                                </tr>
+                            </thead>
+                            <tbody id="individual-table-body" class="divide-y divide-tavern-800/40"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="tab-simulacao" class="hidden space-y-8">
+            <div class="bg-tavern-900/60 border border-amber-500/30 p-4 rounded-lg text-xs text-tavern-200 flex items-center gap-3 font-mono shadow-[0_0_10px_rgba(245,158,11,0.05)]">
+                <i class="fa-solid fa-flask text-amber-500 text-lg"></i>
+                <span>Sala de Misturas: Convide amigos imaginários ou remova membros temporariamente da conta para ver como a força média da guilda é impactada.</span>
+            </div>
+
+            <!-- Simulador Dinâmico de Elenco (Roster e Testes de Impacto) -->
+            <div class="glass-panel p-6 rounded-xl space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-tavern-800 pb-4">
+                    <div>
+                        <h3 class="text-xl font-accent font-bold text-amber-500 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-users-viewfinder"></i> Simulador Dinâmico de Elenco
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Simule cortes ou novos recrutas para a Proud United Bros.
+                        </p>
+                    </div>
+                    <!-- Painel de Comparação Rápida -->
+                    <div class="flex flex-wrap gap-3 bg-black/40 p-3 rounded-lg border border-tavern-800 text-[11px]">
+                        <div class="text-center px-3 font-mono border-r border-tavern-800">
+                            <span class="block text-[8px] text-slate-500 uppercase">Irmãos (Simulado)</span>
+                            <span id="sim-roster-count" class="text-xs font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="text-center px-3 font-mono border-r border-tavern-800">
+                            <span class="block text-[8px] text-slate-500 uppercase">Poder Total (Simulado)</span>
+                            <span id="sim-roster-total-power" class="text-xs font-bold text-amber-400">0</span>
+                        </div>
+                        <div class="text-center px-3 font-mono border-r border-tavern-800">
+                            <span class="block text-[8px] text-slate-500 uppercase">Média de Poder (Sim)</span>
+                            <span id="sim-roster-avg-power" class="text-xs font-bold text-blue-400">0</span>
+                        </div>
+                        <div class="text-center px-3 font-mono">
+                            <span class="block text-[8px] text-slate-500 uppercase">Poder Virtual Adicionado</span>
+                            <span id="sim-roster-added-power" class="text-xs font-bold text-emerald-400">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário de Guerreiro Virtual -->
+                <div class="bg-tavern-950/40 p-4 rounded-lg border border-tavern-800 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Nome do Recruta (Virtual)</label>
+                        <input type="text" id="sim-virt-nome" placeholder="Ex: PUB_Novato" class="w-full bg-tavern-950/80 border border-tavern-700/50 rounded-lg py-2.5 px-4 text-xs text-white focus:outline-none focus:border-amber-500 transition-all font-mono">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Poder Bruto Estimado</label>
+                        <input type="number" id="sim-virt-poder" placeholder="Ex: 25000000" class="w-full bg-tavern-950/80 border border-tavern-700/50 rounded-lg py-2.5 px-4 text-xs text-white focus:outline-none focus:border-amber-500 transition-all font-mono">
+                    </div>
+                    <button onclick="adicionarGuerreiroSimulado()" class="bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white uppercase tracking-wider font-bold py-3 px-5 rounded-lg text-xs transition-all flex items-center justify-center gap-2 border border-emerald-400/50 h-[42px] shadow-lg">
+                        <i class="fa-solid fa-user-plus"></i> Invocar no Bar
+                    </button>
+                </div>
+
+                <!-- Tabela de Membros Ativos na Simulação -->
+                <div>
+                    <h4 class="text-xs font-accent font-bold text-tavern-300 uppercase tracking-wider mb-3">Elenco Sendo Simulado</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[350px] overflow-y-auto custom-scrollbar pr-2" id="sim-roster-list-container">
+                        <!-- Gerado Dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="tab-controle-eventos" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-l-emerald-500">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 border-b border-tavern-700/50 pb-5">
+                    <div>
+                        <h2 class="text-xl font-accent font-black text-amber-500 uppercase tracking-wider flex items-center gap-3">
+                            <i class="fa-solid fa-calendar-days"></i> Rodadas da Guilda (Eventos)
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">O Barman (Admin) pode agendar lutas ou encontros estratégicos para a aliança.</p>
+                    </div>
+                    <button id="btn-novo-evento" onclick="toggleEventoModal(true)" class="bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 border border-emerald-400/50 text-white text-[11px] uppercase tracking-wider font-bold py-3 px-5 rounded-lg flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i class="fa-solid fa-calendar-plus text-sm"></i> Pagar Uma Rodada
+                    </button>
+                </div>
+                <div id="lista-eventos-container" class="space-y-6"></div>
+            </div>
+        </section>
+
+
+        <section id="tab-ferramentas-dados" class="hidden space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+                <div class="glass-panel p-8 rounded-xl space-y-4 text-center md:text-left border-t-4 border-t-amber-500">
+                    <h3 class="text-xl font-accent font-black text-amber-500 uppercase tracking-widest flex items-center justify-center md:justify-start gap-3">
+                        <i class="fa-solid fa-file-export"></i> Despensa de Dados (.json)
+                    </h3>
+                    <p class="text-xs text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
+                        Os dados do sistema fluem diretamente dos arquivos servidos no host. Se você fez edições ou criou registros usando a interface (com a chave do Barman), deve exportar o consolidado em JSON e subir de volta para o diretório "infos.json" no seu servidor para que todos vejam.
+                    </p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
+                        <button id="btn-extract-backup" onclick="exportarDados()" class="bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 border border-amber-500/30 text-white text-[11px] uppercase tracking-wider font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] opacity-50 cursor-not-allowed" disabled>
+                            <i class="fa-solid fa-download"></i> Extrair Barril de Dados (.json)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-msg" class="hidden fixed bottom-6 right-6 z-50 glass-panel border-amber-500 px-6 py-4 rounded-xl flex items-center gap-3 text-xs uppercase font-bold tracking-widest text-amber-400 amber-glow">
+        <i class="fa-solid fa-bell text-amber-500 text-sm animate-bounce"></i>
+        <span id="toast-text">Enchendo os copos...</span>
+    </div>
+
+    <!-- MODAL DE DIGITAR SENHA -->
+    <div id="modal-senha-admin" class="hidden fixed inset-0 z-50 bg-tavern-950/90 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel rounded-2xl w-full max-w-sm overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.2)] border-2 border-amber-600/50">
+            <div class="bg-gradient-to-r from-tavern-900 via-tavern-800 to-tavern-900 p-5 border-b border-amber-600/30 flex items-center justify-between">
+                <h3 class="font-accent font-black text-amber-400 uppercase tracking-widest text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-500"></i> Porta dos Fundos
+                </h3>
+                <button onclick="fecharModalSenha()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="validarSenhaAdmin(event)" class="p-6 space-y-5">
+                <p class="text-xs text-slate-300 leading-relaxed text-center italic">
+                    "Apenas membros confiáveis da PUB possuem a chave para mexer nos livros da taverna."
+                </p>
+                <div>
+                    <label class="block text-amber-400 font-bold uppercase tracking-wider mb-2 text-[10px]">Senha Secreta *</label>
+                    <input type="password" id="input-senha-admin" required placeholder="Digite a chave..." class="w-full bg-tavern-950/80 border border-amber-700/40 rounded-lg p-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm font-mono text-center tracking-widest">
+                </div>
+                <div id="senha-erro-msg" class="hidden text-xs text-red-400 font-bold text-center bg-red-950/50 p-2 rounded border border-red-900/50">
+                    <i class="fa-solid fa-circle-xmark mr-1"></i> Chave errada. Bebida recusada.
+                </div>
+                <div class="pt-3 flex justify-between gap-3 text-xs uppercase font-bold tracking-wide">
+                    <button type="button" onclick="fecharModalSenha()" class="bg-tavern-900/60 hover:bg-tavern-800 border border-tavern-700 text-slate-300 py-3 px-4 rounded-lg w-full transition-all">
+                        Recuar
+                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 border border-amber-500/50 text-white py-3 px-4 rounded-lg w-full transition-all amber-glow">
+                        Destrancar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE FORMULÁRIO DE REGISTRO -->
+    <div id="modal-form-registro" class="hidden fixed inset-0 z-50 bg-tavern-950/90 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel rounded-2xl w-full max-w-xl overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.15)] border-2 border-amber-600/30">
+            <div class="bg-gradient-to-r from-tavern-900 via-tavern-800 to-tavern-900 p-5 border-b border-tavern-500/30 flex items-center justify-between">
+                <h3 id="modal-title" class="font-accent font-black text-amber-300 uppercase tracking-widest text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-amber-500"></i> Cadastrar na Conta do Bar
+                </h3>
+                <button onclick="toggleFormModal(false)" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="registro-form" onsubmit="salvarFormulario(event)" class="p-6 space-y-5 text-[11px] uppercase font-bold tracking-wide text-slate-400">
+                <input type="hidden" id="form-id">
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block mb-2">Data da Revisão *</label>
+                        <input type="date" id="form-data" required class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block mb-2">Cargo na Taverna *</label>
+                        <select id="form-rank" required class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                            <option value="Líder">Líder (R5)</option>
+                            <option value="R4">R4</option>
+                            <option value="R3">R3</option>
+                            <option value="R2">R2</option>
+                            <option value="R1">R1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block mb-2 text-amber-400">Nome do Irmão *</label>
+                        <input type="text" id="form-nome" required placeholder="Ex: PUB_Brother" class="w-full bg-tavern-950/80 border border-amber-700/40 rounded-lg p-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-blue-300">Nível do Castelo (Nv) *</label>
+                        <input type="number" id="form-nivel" required min="1" max="40" placeholder="Ex: 25" class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block mb-2 text-red-400">Poder Total *</label>
+                        <input type="number" id="form-poder" required min="0" placeholder="Ex: 15000000" class="w-full bg-tavern-950/80 border border-red-900/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-red-400 font-mono">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-emerald-400">Doação à Guilda *</label>
+                        <input type="number" id="form-doacao" required min="0" placeholder="Ex: 75000" class="w-full bg-tavern-950/80 border border-emerald-900/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-400 font-mono">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block mb-2">Dias Sumido (Off) *</label>
+                        <input type="number" id="form-offline" required min="0" placeholder="0 = No Bar Hoje" class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block mb-2">Primeiro Gole (Entrada)</label>
+                        <input type="date" id="form-admissao" class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-rose-400">Data de Expulsão (Saída)</label>
+                    <input type="date" id="form-demissao" class="w-full bg-tavern-950/80 border border-rose-900/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-rose-400 font-mono">
+                    <p class="text-[9px] text-slate-500 mt-2 normal-case font-normal font-sans">Se em branco, marcamos ele como expulso quando não for mais visto nas auditorias recentes.</p>
+                </div>
+
+                <div class="pt-5 border-t border-tavern-700/50 flex justify-end gap-3 mt-2">
+                    <button type="button" onclick="toggleFormModal(false)" class="bg-tavern-900/60 hover:bg-tavern-800 border border-tavern-700 text-slate-300 py-2.5 px-6 rounded-lg transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 border border-emerald-500/50 text-white py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
+                        Anotar na Conta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE EXCLUSÃO -->
+    <div id="modal-confirm-delete" class="hidden fixed inset-0 z-50 bg-tavern-950/90 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel border-2 border-red-600/50 rounded-2xl w-full max-w-sm overflow-hidden p-7 shadow-[0_0_40px_rgba(220,38,38,0.2)]">
+            <h3 class="font-accent font-black text-red-400 uppercase tracking-widest text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-fire"></i> Apagar Registro
+            </h3>
+            <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                Tem certeza que quer arrancar esta folha do livro? Isso não poderá ser desfeito.
+            </p>
+            <div class="flex justify-end gap-3 text-xs uppercase font-bold tracking-wide">
+                <button onclick="toggleDeleteModal(false)" class="bg-tavern-900/60 hover:bg-tavern-800 border border-tavern-700 text-slate-300 py-2.5 px-5 rounded-lg transition-all">
+                    Cancelar
+                </button>
+                <button id="btn-confirm-delete-action" class="bg-red-800 hover:bg-red-700 border border-red-500/50 text-white py-2.5 px-5 rounded-lg shadow-[0_0_15px_rgba(220,38,38,0.4)] transition-all">
+                    Queimar Registro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DO EVENTO -->
+    <div id="modal-form-evento" class="hidden fixed inset-0 z-50 bg-tavern-950/90 flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-panel border-2 border-amber-600/50 rounded-2xl w-full max-w-sm overflow-hidden shadow-[0_0_40px_rgba(245,158,11,0.15)]">
+            <div class="bg-gradient-to-r from-tavern-900 via-tavern-800 to-tavern-900 p-5 border-b border-amber-600/30 flex items-center justify-between">
+                <h3 class="font-accent font-black text-amber-400 uppercase tracking-widest text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-bullhorn text-amber-500"></i> Convocar Rodada
+                </h3>
+                <button onclick="toggleEventoModal(false)" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="salvarNovoEvento(event)" class="p-6 space-y-5 text-[11px] uppercase font-bold tracking-wide text-slate-400">
+                <div>
+                    <label class="block mb-2 text-amber-300">Nome da Batalha/Evento *</label>
+                    <input type="text" id="evt-nome" required placeholder="Ex: Defesa do Forte" class="w-full bg-tavern-950/80 border border-amber-700/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                </div>
+                <div>
+                    <label class="block mb-2">Horário Combinado *</label>
+                    <input type="datetime-local" id="evt-horario" required class="w-full bg-tavern-950/80 border border-tavern-600/40 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                </div>
+                <div class="pt-3 flex justify-end gap-3 mt-2">
+                    <button type="button" onclick="toggleEventoModal(false)" class="bg-tavern-900/60 hover:bg-tavern-800 border border-tavern-700 text-slate-300 py-2.5 px-5 rounded-lg transition-all">Cancelar</button>
+                    <button type="submit" class="bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 border border-amber-500/50 text-white py-2.5 px-5 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all">Gritar Convite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="max-w-7xl mx-auto px-4 py-16 text-center text-[10px] text-slate-500 border-t border-tavern-800/40 uppercase tracking-widest">
+        <div class="mb-4 flex justify-center">
+            <i class="fa-solid fa-beer-mug-empty text-2xl text-amber-500/30"></i>
+        </div>
+        <p class="font-accent tracking-[0.2em] text-amber-600 font-black mb-3 text-sm">PUB — PROUD UNITED BROS</p>
+        <p class="mb-1 text-slate-400">Brotherhood & Beer. Direitos reservados ao Mestre Cervejeiro PUB.</p>
+        <p class="mt-6 font-mono text-[9px] text-slate-600 normal-case tracking-normal">Sistema forjado para a taverna (2026).</p>
+    </footer>
+
+    <script>
+        // Estado global da aplicação (In-Memory)
+        let dbColetas = [];
+        let dbEventos = JSON.parse(localStorage.getItem('PUB_dbEventos')) || [];
+        let dbAliancas = []; 
+        let dbMural = ""; 
+        let registroIdParaDeletar = null;
+        
+        // Estado temporário de Simulação
+        let estadoSimulacao = {
+            membros: [] 
+        };
+
+        // Estado de segurança (atualizado com a nova sigla PUB)
+        let isAdmin = false;
+        const SENHA_SECRETA = "PUB2026"; 
+
+        // Lista para armazenar falhas críticas 
+        let errosDeCarregamento = [];
+
+        function getCleanUrl(filename) {
+            try {
+                const loc = window.location;
+                const dir = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+                const cleanOrigin = `${loc.protocol}//${loc.host}`;
+                return `${cleanOrigin}${dir}${filename}`;
+            } catch (e) {
+                console.warn("Falha ao higienizar origem. Usando fallback direto:", filename);
+                return filename;
+            }
+        }
+
+        window.onload = async function() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const formInputDate = document.getElementById('form-data');
+            if (formInputDate) {
+                formInputDate.value = hoje;
+            }
+
+            dbAliancas = [];
+            const timestamp = Date.now();
+
+            try {
+                const cleanInfosUrl = `${getCleanUrl('infos.json')}?v=${timestamp}`;
+                const responseInfos = await fetch(cleanInfosUrl);
+                if (responseInfos.ok) {
+                    const data = await responseInfos.json();
+                    if (Array.isArray(data)) {
+                        dbColetas = data;
+                    } else if (data && Array.isArray(data.coletas)) {
+                        dbColetas = data.coletas;
+                        if (Array.isArray(data.eventos)) {
+                            dbEventos = data.eventos;
+                        }
+                        if (Array.isArray(data.aliancas)) {
+                            dbAliancas = data.aliancas;
+                        }
+                    } else {
+                        throw new Error("Estrutura inválida ou inconsistente.");
+                    }
+                } else {
+                    throw new Error(`Servidor respondeu com código HTTP ${responseInfos.status}`);
+                }
+            } catch (error) {
+                console.error("Erro crítico ao obter infos.json:", error);
+                errosDeCarregamento.push(`infos.json (${error.message || "Não localizado"})`);
+            }
+
+            try {
+                const cleanAlliancesUrl = `${getCleanUrl('alliances-compiled.json')}?v=${timestamp}`;
+                const responseAlliances = await fetch(cleanAlliancesUrl);
+                if (responseAlliances.ok) {
+                    const dataAlliances = await responseAlliances.json();
+                    if (Array.isArray(dataAlliances)) {
+                        dbAliancas = dataAlliances;
+                    } else if (dataAlliances && Array.isArray(dataAlliances.aliancas)) {
+                        dbAliancas = dataAlliances.aliancas;
+                    } else {
+                        throw new Error("Estrutura inválida de alianças.");
+                    }
+                } else {
+                    throw new Error(`Servidor respondeu com HTTP ${responseAlliances.status}`);
+                }
+            } catch (error) {
+                console.error("Erro crítico ao obter alliances-compiled.json:", error);
+                errosDeCarregamento.push(`alliances-compiled.json (${error.message || "Não localizado"})`);
+            }
+
+            try {
+                const cleanMuralUrl = `${getCleanUrl('mural.txt')}?v=${timestamp}`;
+                const responseMural = await fetch(cleanMuralUrl);
+                if (responseMural.ok) {
+                    dbMural = await responseMural.text();
+                } else {
+                    throw new Error(`Servidor respondeu com código HTTP ${responseMural.status}`);
+                }
+            } catch (error) {
+                console.error("Erro crítico ao obter mural.txt:", error);
+                errosDeCarregamento.push(`mural.txt (${error.message || "Não localizado"})`);
+            }
+
+            if (errosDeCarregamento.length > 0) {
+                exibirPainelErroCritico();
+                return;
+            }
+
+            showToast("Estoque revisado e sistema no ar!");
+            inicializarInterface();
+            switchTab('mural-alianca'); 
+        };
+
+        function exibirPainelErroCritico() {
+            const modalErro = document.getElementById('modal-erro-critico');
+            const listaErros = document.getElementById('lista-erros-arquivos');
+            if (modalErro && listaErros) {
+                listaErros.innerHTML = errosDeCarregamento.map(erro => {
+                    return `<li class="text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-xmark text-xs"></i> ${erro}
+                    </li>`;
+                }).join('');
+                modalErro.classList.remove('hidden');
+            }
+        }
+
+        function inicializarInterface() {
+            recalcularPainelEstatistico();
+            renderDatabaseTable();
+            renderAtividadeIndividual();
+            renderMural();
+            atualizarControlesEdicao();
+            processarEAtualizarNAP7();
+        }
+
+        function obterColetasDeduplicadas() {
+            const uniqueMap = {};
+            dbColetas.forEach(r => {
+                if (r && r.nome && r.data) {
+                    const chave = `${r.nome.trim()}_${r.data}`;
+                    uniqueMap[chave] = r; 
+                }
+            });
+            return Object.values(uniqueMap);
+        }
+
+        function abrirModalSenha() {
+            if (isAdmin) {
+                isAdmin = false;
+                showToast("Acesso recolhido. Voltamos ao modo espectador.");
+                atualizarControlesEdicao();
+                recalcularPainelEstatistico();
+                renderDatabaseTable();
+                renderAtividadeIndividual();
+                processarEAtualizarNAP7();
+                if (!document.getElementById('tab-controle-eventos').classList.contains('hidden')) {
+                    renderizarEventos();
+                }
+            } else {
+                const erroMsg = document.getElementById('senha-erro-msg');
+                if (erroMsg) erroMsg.classList.add('hidden');
+                
+                const senhaInput = document.getElementById('input-senha-admin');
+                if (senhaInput) senhaInput.value = "";
+                
+                const modalSenha = document.getElementById('modal-senha-admin');
+                if (modalSenha) modalSenha.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    const inputFocus = document.getElementById('input-senha-admin');
+                    if (inputFocus) inputFocus.focus();
+                }, 100);
+            }
+        }
+
+        function fecharModalSenha() {
+            const modalSenha = document.getElementById('modal-senha-admin');
+            if (modalSenha) modalSenha.classList.add('hidden');
+        }
+
+        function validarSenhaAdmin(event) {
+            event.preventDefault();
+            const inputSenha = document.getElementById('input-senha-admin');
+            const senhaDigitada = inputSenha ? inputSenha.value : "";
+
+            if (senhaDigitada === SENHA_SECRETA) {
+                isAdmin = true;
+                fecharModalSenha();
+                showToast("Porta dos fundos aberta! Pode alterar a vontade.");
+                atualizarControlesEdicao();
+                recalcularPainelEstatistico();
+                renderDatabaseTable();
+                renderAtividadeIndividual();
+                processarEAtualizarNAP7();
+                if (!document.getElementById('tab-controle-eventos').classList.contains('hidden')) {
+                    renderizarEventos();
+                }
+            } else {
+                const erroMsg = document.getElementById('senha-erro-msg');
+                if (erroMsg) erroMsg.classList.remove('hidden');
+                if (inputSenha) inputSenha.value = "";
+            }
+        }
+
+        function atualizarControlesEdicao() {
+            const btnToggle = document.getElementById('btn-toggle-admin');
+            const statusPermissao = document.getElementById('status-permissao');
+            const btnNovo = document.getElementById('btn-novo-registro');
+            const btnNovoEvento = document.getElementById('btn-novo-evento');
+            const btnExtractBackup = document.getElementById('btn-extract-backup');
+
+            if (isAdmin) {
+                if (btnToggle) {
+                    btnToggle.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Trancar Taverna</span>';
+                    btnToggle.className = "bg-gradient-to-r from-red-700 to-rose-900 hover:from-red-600 hover:to-rose-800 border border-red-500/30 text-white text-[10px] uppercase tracking-wider font-bold py-2 px-4 rounded-full flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(244,63,94,0.3)]";
+                }
+                if (statusPermissao) {
+                    statusPermissao.innerHTML = '<i class="fa-solid fa-lock-open text-emerald-400"></i> <span class="text-emerald-400">Barman Logado</span>';
+                }
+                if (btnNovo) btnNovo.removeAttribute('disabled');
+                if (btnNovoEvento) btnNovoEvento.removeAttribute('disabled');
+                if (btnExtractBackup) {
+                    btnExtractBackup.removeAttribute('disabled');
+                    btnExtractBackup.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            } else {
+                if (btnToggle) {
+                    btnToggle.innerHTML = '<i class="fa-solid fa-key"></i> <span>Chave da Taverna</span>';
+                    btnToggle.className = "bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 border border-amber-500/30 text-white text-[10px] uppercase tracking-wider font-bold py-2 px-4 rounded-full flex items-center gap-2 transition-all shadow-lg hover:shadow-amber-500/20";
+                }
+                if (statusPermissao) {
+                    statusPermissao.innerHTML = '<i class="fa-solid fa-lock text-tavern-400"></i> <span class="text-tavern-400">Acesso Restrito</span>';
+                }
+                if (btnNovo) btnNovo.setAttribute('disabled', 'true');
+                if (btnNovoEvento) btnNovoEvento.setAttribute('disabled', 'true');
+                if (btnExtractBackup) {
+                    btnExtractBackup.setAttribute('disabled', 'true');
+                    btnExtractBackup.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['mural-alianca', 'informacoes-gerais', 'base-detalhada', 'controle-activity', 'ferramentas-dados', 'controle-eventos', 'nap7', 'simulacao'];
+            
+            tabs.forEach(id => {
+                const el = document.getElementById(`tab-${id}`);
+                if (el) el.classList.add('hidden');
+                
+                const btn = document.getElementById(`btn-${id}`);
+                if (btn) {
+                    btn.classList.remove('bg-gradient-to-b', 'from-amber-600', 'to-amber-800', 'text-white', 'shadow-[0_0_15px_rgba(245,158,11,0.2)]', 'border-amber-500/50');
+                    btn.classList.add('bg-tavern-900/60', 'text-slate-300', 'border-tavern-700/30');
+                }
+            });
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-tavern-900/60', 'text-slate-300', 'border-tavern-700/30');
+                activeBtn.classList.add('bg-gradient-to-b', 'from-amber-600', 'to-amber-800', 'text-white', 'shadow-[0_0_15px_rgba(245,158,11,0.2)]', 'border-amber-500/50');
+            }
+
+            if (tabId === 'mural-alianca') renderMural();
+            else if (tabId === 'informacoes-gerais') recalcularPainelEstatistico();
+            else if (tabId === 'base-detalhada') renderDatabaseTable();
+            else if (tabId === 'controle-activity') renderAtividadeIndividual();
+            else if (tabId === 'controle-eventos') renderizarEventos();
+            else if (tabId === 'nap7') processarEAtualizarNAP7();
+            else if (tabId === 'simulacao') inicializarSimulador();
+        }
+
+        function formatarNumero(num) {
+            return Number(num).toLocaleString('pt-PT');
+        }
+
+        function formatarPoderCompacto(num) {
+            if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function parsePoderStr(val) {
+            if (typeof val === 'number') return val;
+            if (!val) return 0;
+            let clean = val.toString().toUpperCase().trim();
+            let multiplicador = 1;
+            if (clean.endsWith('M')) {
+                multiplicador = 1000000;
+                clean = clean.replace('M', '');
+            } else if (clean.endsWith('K')) {
+                multiplicador = 1000;
+                clean = clean.replace('K', '');
+            } else if (clean.endsWith('B')) {
+                multiplicador = 1000000000;
+                clean = clean.replace('B', '');
+            }
+            return parseFloat(clean) * multiplicador;
+        }
+
+        function formatarData(dataStr) {
+            if (!dataStr) return "-";
+            const partes = dataStr.split('-');
+            if (partes.length < 3) return dataStr;
+            const [ano, mes, dia] = partes;
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function showToast(mensagem) {
+            const toast = document.getElementById('toast-msg');
+            const txt = document.getElementById('toast-text');
+            if (toast && txt) {
+                txt.innerText = mensagem;
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 4000);
+            }
+        }
+
+        function obterDataMaisRecenteGlobal() {
+            const coletas = obterColetasDeduplicadas();
+            if (coletas.length === 0) return null;
+            return coletas.reduce((max, r) => r.data > max ? r.data : max, coletas[0].data);
+        }
+
+        function processarMembroStatus(membroNome, ultimoReg) {
+            const dataMaisRecenteGlobal = obterDataMaisRecenteGlobal();
+            if (ultimoReg.demissao) {
+                return { ativo: false, dataDemissao: ultimoReg.demissao, metodo: 'manual' };
+            }
+            if (dataMaisRecenteGlobal && ultimoReg.data < dataMaisRecenteGlobal) {
+                return { ativo: false, dataDemissao: ultimoReg.data, metodo: 'auto' };
+            }
+            return { ativo: true, dataDemissao: "", metodo: 'ativo' };
+        }
+
+        function renderMural() {
+            const container = document.getElementById('mural-mensagens-conteudo');
+            if (!container) return;
+            if (!dbMural || dbMural.trim() === "") {
+                container.innerHTML = `
+                    <div class="col-span-full py-20 flex flex-col items-center justify-center text-center space-y-4">
+                        <i class="fa-solid fa-beer-mug-empty text-tavern-700 text-4xl animate-pulse pointer-events-none"></i>
+                        <p class="text-slate-500 text-xs font-serif italic max-w-sm">
+                            O quadro está vazio. Nenhuma regra nova colada no mural ultimamente.
+                        </p>
+                    </div>`;
+                return;
+            }
+
+            const sections = dbMural.split(/(?=#)/g);
+            let html = "";
+
+            sections.forEach(sec => {
+                const lines = sec.split('\n');
+                let secTitle = "";
+                let secContent = "";
+                let hasContent = false;
+
+                lines.forEach((line, idx) => {
+                    const trimmed = line.trim();
+                    if (idx === 0 && trimmed.startsWith('#')) {
+                        secTitle = trimmed.replace(/^#+\s*/, '');
+                    } else if (trimmed.startsWith('#') && !secTitle) {
+                        secTitle = trimmed.replace(/^#+\s*/, '');
+                    } else if (trimmed.startsWith('-') || trimmed.startsWith('*')) {
+                        const bulletText = trimmed.substring(1).trim();
+                        secContent += `
+                            <div class="flex items-start gap-2 text-xs text-slate-300 mb-1.5 leading-relaxed">
+                                <i class="fa-solid fa-play text-amber-600/80 mt-1 text-[7px] shrink-0"></i>
+                                <span>${bulletText}</span>
+                            </div>`;
+                        hasContent = true;
+                    } else if (trimmed !== "") {
+                        secContent += `<p class="text-xs text-slate-300 leading-relaxed mb-2">${trimmed}</p>`;
+                        hasContent = true;
+                    }
+                });
+
+                if (secTitle || hasContent) {
+                    html += `
+                        <div class="bg-tavern-950/60 border border-tavern-800 p-6 rounded-xl hover:border-amber-500/30 transition-all shadow-inner relative overflow-hidden group">
+                            <div class="absolute -right-6 -bottom-6 opacity-5 text-amber-500 text-5xl group-hover:scale-110 transition-transform pointer-events-none">
+                                <i class="fa-solid fa-clipboard"></i>
+                            </div>
+                            <h4 class="font-accent text-xs font-black text-amber-400 tracking-wider uppercase mb-3.5 border-b border-amber-900/30 pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-thumbtack text-amber-500 text-[10px]"></i> ${secTitle || "Aviso da Aliança"}
+                            </h4>
+                            <div class="space-y-1">${secContent}</div>
+                        </div>`;
+                }
+            });
+
+            container.innerHTML = html || `
+                <div class="col-span-full py-20 flex flex-col items-center justify-center text-center space-y-4">
+                    <i class="fa-solid fa-beer-mug-empty text-tavern-700 text-4xl animate-pulse pointer-events-none"></i>
+                    <p class="text-slate-500 text-xs font-serif italic max-w-sm">
+                        O quadro de cortiça está limpo.
+                    </p>
+                </div>`;
+        }
+
+        function obterMembrosNoPanoramaAtual() {
+            const coletas = obterColetasDeduplicadas();
+            if (coletas.length === 0) return [];
+            const playerUltimoRegistro = {};
+            coletas.forEach(r => {
+                if (r && r.nome) {
+                    if (!playerUltimoRegistro[r.nome] || r.data >= playerUltimoRegistro[r.nome].data) {
+                        playerUltimoRegistro[r.nome] = r;
+                    }
+                }
+            });
+            return Object.values(playerUltimoRegistro);
+        }
+
+        function calcularQuadrante(poder, doacao, mediaPoder, mediaDoacao) {
+            poder = Number(poder);
+            doacao = Number(doacao);
+            if (poder >= mediaPoder && doacao >= mediaDoacao) return { num: 1, nome: "Lendas do Bar" };
+            else if (poder < mediaPoder && doacao >= mediaDoacao) return { num: 2, nome: "Clientes Fiéis" };
+            else if (poder >= mediaPoder && doacao < mediaDoacao) return { num: 3, nome: "Devedores" };
+            else return { num: 4, nome: "Bebados Caídos" };
+        }
+
+        function recalcularPainelEstatistico() {
+            const coletas = obterColetasDeduplicadas();
+            const dataRecenteAtivos = obterDataMaisRecenteGlobal();
+            
+            const spanDataAuditoria = document.getElementById('span-auditoria-data');
+            if (spanDataAuditoria) spanDataAuditoria.innerText = dataRecenteAtivos ? formatarData(dataRecenteAtivos) : "Nenhum registro ativo";
+
+            const todosPanorama = obterMembrosNoPanoramaAtual();
+            const ativosAuditoriaRecente = coletas.filter(r => {
+                const status = processarMembroStatus(r.nome, r);
+                return status.ativo && r.data === dataRecenteAtivos;
+            });
+            const totalAtivos = ativosAuditoriaRecente.length;
+
+            let mediaPoder = 0, mediaDoacao = 0, notaCorte = 0, pctCumpremCorte = 0;
+            if (totalAtivos > 0) {
+                const somaPoder = ativosAuditoriaRecente.reduce((acc, curr) => acc + Number(curr.poder || 0), 0);
+                const somaDoacao = ativosAuditoriaRecente.reduce((acc, curr) => acc + Number(curr.doacao || 0), 0);
+                mediaPoder = Math.round(somaPoder / totalAtivos);
+                mediaDoacao = Math.round(somaDoacao / totalAtivos);
+                notaCorte = Math.round(mediaPoder * 0.70);
+                const cumpremCorte = ativosAuditoriaRecente.filter(m => Number(m.poder || 0) >= notaCorte).length;
+                pctCumpremCorte = Math.round((cumpremCorte / totalAtivos) * 100);
+            }
+
+            if (document.getElementById('metric-media-poder')) document.getElementById('metric-media-poder').innerText = formatarNumero(mediaPoder);
+            if (document.getElementById('metric-media-doacao')) document.getElementById('metric-media-doacao').innerText = formatarNumero(mediaDoacao);
+            if (document.getElementById('metric-nota-corte')) document.getElementById('metric-nota-corte').innerText = formatarNumero(notaCorte);
+            if (document.getElementById('metric-cumprem-corte')) document.getElementById('metric-cumprem-corte').innerText = `${pctCumpremCorte}%`;
+
+            const totalAtivosGerais = todosPanorama.filter(m => processarMembroStatus(m.nome, m).ativo).length;
+            if (document.getElementById('header-total-membros')) document.getElementById('header-total-membros').innerText = totalAtivosGerais;
+            if (document.getElementById('metric-ativos-on')) document.getElementById('metric-ativos-on').innerText = `${totalAtivos} / ${totalAtivosGerais}`;
+
+            const corteSpans = document.querySelectorAll('.corte-span');
+            corteSpans.forEach(s => s.innerText = formatarNumero(notaCorte));
+
+            const listas = {
+                1: { id: "list-alta-performance", countId: "quad-alta-count", html: "" },
+                2: { id: "list-potencial-crescimento", countId: "quad-potencial-count", html: "" },
+                3: { id: "list-baixa-doacao", countId: "quad-doacao-count", html: "" },
+                4: { id: "list-baixa-atividade", countId: "quad-atividade-count", html: "" }
+            };
+            const contadores = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+            ativosAuditoriaRecente.forEach(m => {
+                const quad = calcularQuadrante(m.poder, m.doacao, mediaPoder, mediaDoacao);
+                contadores[quad.num]++;
+                listas[quad.num].html += `
+                    <div class="flex items-center justify-between p-2.5 bg-tavern-950/40 rounded border border-tavern-700/30 hover:border-amber-500/30 transition-all shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-slate-200 tracking-wide">${m.nome}</span>
+                            <span class="text-[9px] text-tavern-200 px-1 border border-tavern-600/50 rounded font-black">${m.rank}</span>
+                        </div>
+                        <div class="text-right text-[11px] font-mono">
+                            <div class="text-slate-300">Poder: ${formatarNumero(m.poder)}</div>
+                            <div class="text-amber-500 font-bold">Doado: ${formatarNumero(m.doacao)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            Object.keys(listas).forEach(num => {
+                const countEl = document.getElementById(listas[num].countId);
+                if (countEl) countEl.innerText = contadores[num];
+                const listEl = document.getElementById(listas[num].id);
+                if (listEl) {
+                    listEl.innerHTML = listas[num].html || `<p class="text-slate-500 italic text-center py-4 text-xs font-serif">Mesa vazia nesta rodada.</p>`;
+                }
+            });
+
+            const inativos = todosPanorama.filter(m => processarMembroStatus(m.nome, m).ativo && Number(m.offline || 0) >= 1)
+                                          .sort((a, b) => b.offline - a.offline);
+            const containerInativos = document.getElementById('lista-inativos');
+            if (containerInativos) {
+                if (inativos.length === 0) {
+                    containerInativos.innerHTML = `<div class="p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-lg text-center"><p class="text-emerald-500 text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-beer mr-2"></i> Taverna lotada, todos presentes!</p></div>`;
+                } else {
+                    let inativosHtml = "";
+                    inativos.forEach(m => {
+                        const statusCor = m.offline >= 5 ? 'text-rose-400 bg-rose-950/30 border-rose-900/50' : 'text-orange-400 bg-orange-950/30 border-orange-900/50';
+                        inativosHtml += `
+                            <div class="p-3 rounded-lg flex items-center justify-between border ${statusCor} shadow-sm">
+                                <div>
+                                    <span class="font-bold block text-slate-200 text-xs tracking-wide">${m.nome}</span>
+                                    <span class="text-[9px] uppercase tracking-wider text-slate-400">Última dose em ${formatarData(m.data)}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2.5 py-1 rounded text-[10px] font-mono font-black tracking-wider bg-black/20">${m.offline} DIA(S)</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    containerInativos.innerHTML = inativosHtml;
+                }
+            }
+        }
+
+        function processarEAtualizarNAP7() {
+            const coletas = obterColetasDeduplicadas();
+            const dataRecenteAtivos = obterDataMaisRecenteGlobal();
+            const ativosPUB = coletas.filter(r => r && processarMembroStatus(r.nome, r).ativo && r.data === dataRecenteAtivos);
+
+            const pubPoderTotal = ativosPUB.reduce((acc, curr) => acc + Number(curr.poder || 0), 0);
+            const pubMembrosCount = ativosPUB.length;
+            const pubNivelMedio = pubMembrosCount > 0 ? (ativosPUB.reduce((acc, curr) => acc + Number(curr.nivel || 0), 0) / pubMembrosCount) : 0;
+
+            const ativosPUBOrdenados = [...ativosPUB].sort((a, b) => b.poder - a.poder);
+            const pubTop10Poder = ativosPUBOrdenados.slice(0, 10).reduce((acc, curr) => acc + Number(curr.poder || 0), 0);
+            const pubTop20Poder = ativosPUBOrdenados.slice(0, 20).reduce((acc, curr) => acc + Number(curr.poder || 0), 0);
+            const pubRestoPoder = pubPoderTotal - pubTop20Poder;
+
+            if(document.getElementById('nap7-thc-power')) document.getElementById('nap7-thc-power').innerText = formatarPoderCompacto(pubPoderTotal);
+            if(document.getElementById('nap7-thc-membros')) document.getElementById('nap7-thc-membros').innerText = pubMembrosCount;
+            if(document.getElementById('nap7-thc-cidade')) document.getElementById('nap7-thc-cidade').innerText = `Lv ${pubNivelMedio.toFixed(1)}`;
+
+            const pctTop20 = pubPoderTotal > 0 ? Math.round((pubTop20Poder / pubPoderTotal) * 100) : 0;
+            if (document.getElementById('donut-top-val')) document.getElementById('donut-top-val').innerText = formatarPoderCompacto(pubTop20Poder);
+            if (document.getElementById('donut-resto-val')) document.getElementById('donut-resto-val').innerText = formatarPoderCompacto(pubRestoPoder);
+            if (document.getElementById('donut-pct-text')) document.getElementById('donut-pct-text').innerText = `${pctTop20}%`;
+            if (document.getElementById('donut-segment-top')) document.getElementById('donut-segment-top').setAttribute('stroke-dasharray', `${pctTop20} ${100 - pctTop20}`);
+
+            let mediaPoder = 0, notaCorte = 0;
+            if (pubMembrosCount > 0) {
+                mediaPoder = Math.round(pubPoderTotal / pubMembrosCount);
+                notaCorte = Math.round(mediaPoder * 0.70);
+            }
+            const membrosAbaixoCorte = ativosPUB.filter(m => Number(m.poder || 0) < notaCorte).length;
+            const avgNivelArredondado = Math.round(pubNivelMedio);
+            const cidadesAbaixoMedia = ativosPUB.filter(m => Number(m.nivel || 0) < avgNivelArredondado).length;
+
+            if(document.getElementById('gargalo-poder-texto')) document.getElementById('gargalo-poder-texto').innerText = `Irmãos < ${formatarPoderCompacto(notaCorte)} Poder: ${membrosAbaixoCorte}`;
+            if(document.getElementById('gargalo-cidade-texto')) document.getElementById('gargalo-cidade-texto').innerText = `Castelos < Lv ${avgNivelArredondado}: ${cidadesAbaixoMedia}`;
+
+            // Adaptado para achar alianças que não são a PUB
+            const aliancasEstrangeiras = dbAliancas.filter(a => a && a.alianca && !a.alianca.toLowerCase().includes("pub") && !a.alianca.toLowerCase().includes("bar"));
+
+            let aliancasParaComparacao = aliancasEstrangeiras.map(al => {
+                const membrosEstrangeiros = al.membros || [];
+                const membrosConvertidos = membrosEstrangeiros.map(m => ({ ...m, poderCalculado: parsePoderStr(m.poder) })).sort((a, b) => b.poderCalculado - a.poderCalculado);
+                const poderTotal = al.poder_total_alianca || membrosConvertidos.reduce((acc, curr) => acc + curr.poderCalculado, 0);
+                const countMembros = membrosEstrangeiros.length;
+                const top10 = membrosConvertidos.slice(0, 10).reduce((acc, curr) => acc + curr.poderCalculado, 0);
+                const top20 = membrosConvertidos.slice(0, 20).reduce((acc, curr) => acc + curr.poderCalculado, 0);
+                const cidadeMedia = countMembros > 0 ? (membrosConvertidos.reduce((acc, curr) => acc + Number(curr.nivel_cidade || 0), 0) / countMembros) : 0;
+                
+                return { nome: al.alianca || "Guilda Sem Nome", poderTotal, membros: countMembros, top10, top20, nivelMedio: cidadeMedia, isPub: false };
+            });
+
+            const pubUnidade = { nome: "PUB (Proud United Bros)", poderTotal: pubPoderTotal, membros: pubMembrosCount, top10: pubTop10Poder, top20: pubTop20Poder, nivelMedio: pubNivelMedio, isPub: true };
+            const todasMapeadas = [...aliancasParaComparacao, pubUnidade].sort((a, b) => b.poderTotal - a.poderTotal);
+            const posicaoPub = todasMapeadas.findIndex(a => a.isPub) + 1;
+            
+            if(document.getElementById('nap7-ranking-position')) {
+                document.getElementById('nap7-ranking-position').innerText = posicaoPub > 0 ? `Ranking: #${posicaoPub}` : "Ranking: --";
+            }
+
+            const nap7AlliancesList = document.getElementById('nap7-alliances-list');
+            if (nap7AlliancesList) {
+                nap7AlliancesList.innerHTML = aliancasParaComparacao.length === 0 
+                    ? `<div class="p-8 text-center text-xs text-slate-500 col-span-full glass-panel italic">Ainda não recebemos os relatórios das outras guildas (alliances-compiled.json).</div>` 
+                    : aliancasParaComparacao.map(al => {
+                        const globalIndex = todasMapeadas.findIndex(x => x.nome === al.nome) + 1;
+                        return `
+                        <div class="glass-panel p-5 rounded-xl hover:border-amber-500/40 transition-all space-y-4">
+                            <div class="border-b border-tavern-700/50 pb-3 flex justify-between items-center">
+                                <div>
+                                    <span class="text-[9px] bg-tavern-900 text-tavern-300 font-black border border-tavern-600/50 px-2 py-0.5 rounded tracking-widest uppercase">Aliado NAP</span>
+                                    <h4 class="font-accent text-sm font-black text-amber-500 tracking-wider mt-1 truncate max-w-[150px]" title="${al.nome}">#${globalIndex} ${al.nome}</h4>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-xl font-mono font-black text-white">${formatarPoderCompacto(al.poderTotal)}</span>
+                                    <span class="block text-[9px] text-slate-400 uppercase tracking-wide">Poder Bruto</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                                <div class="bg-tavern-950/40 p-2 rounded border border-tavern-800">
+                                    <span class="text-slate-500 block uppercase mb-0.5">Top 10</span>
+                                    <span class="font-bold text-amber-200">${formatarPoderCompacto(al.top10)}</span>
+                                </div>
+                                <div class="bg-tavern-950/40 p-2 rounded border border-tavern-800">
+                                    <span class="text-slate-500 block uppercase mb-0.5">Top 20</span>
+                                    <span class="font-bold text-amber-200">${formatarPoderCompacto(al.top20)}</span>
+                                </div>
+                                <div class="bg-tavern-950/40 p-2 rounded border border-tavern-800">
+                                    <span class="text-slate-500 block uppercase mb-0.5">Irmãos</span>
+                                    <span class="font-bold text-white">${al.membros} <i class="fa-solid fa-users text-slate-600 text-[9px]"></i></span>
+                                </div>
+                                <div class="bg-tavern-950/40 p-2 rounded border border-tavern-800">
+                                    <span class="text-slate-500 block uppercase mb-0.5">Lvl Médio</span>
+                                    <span class="font-bold text-white">Lv ${al.nivelMedio.toFixed(1)}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                    }).join('');
+            }
+
+            const gapContainer = document.getElementById('gap-bars-container');
+            if (gapContainer) {
+                if (aliancasParaComparacao.length === 0) {
+                    gapContainer.innerHTML = `<p class="text-slate-500 text-xs italic text-center py-4">Faltam oráculos para estimar Gaps.</p>`;
+                } else {
+                    let htmlBars = "";
+                    aliancasParaComparacao.forEach(al => {
+                        const diff = pubPoderTotal - al.poderTotal;
+                        const diffAbs = Math.abs(diff);
+                        let barColor = "", textLabel = "", icon = "";
+
+                        if (diff > 0) {
+                            barColor = "bg-emerald-500";
+                            textLabel = `<span class="text-emerald-400">+${formatarPoderCompacto(diffAbs)} à frente</span>`;
+                            icon = `<i class="fa-solid fa-caret-up text-emerald-400"></i>`;
+                        } else {
+                            barColor = "bg-rose-500";
+                            textLabel = `<span class="text-rose-400">-${formatarPoderCompacto(diffAbs)} atrás</span>`;
+                            icon = `<i class="fa-solid fa-caret-down text-rose-400"></i>`;
+                        }
+
+                        const maxPowerInComparison = Math.max(pubPoderTotal, ...aliancasParaComparacao.map(a => a.poderTotal));
+                        const pctPub = maxPowerInComparison > 0 ? (pubPoderTotal / maxPowerInComparison) * 100 : 0;
+                        const pctOutra = maxPowerInComparison > 0 ? (al.poderTotal / maxPowerInComparison) * 100 : 0;
+
+                        htmlBars += `
+                            <div class="bg-tavern-950/40 p-3 rounded-lg border border-tavern-800 relative">
+                                <div class="flex justify-between text-[10px] font-bold uppercase mb-2 font-accent tracking-wider">
+                                    <span class="text-amber-500">Nós (PUB)</span>
+                                    <span class="text-slate-300 truncate max-w-[100px] text-right" title="${al.nome}">${al.nome}</span>
+                                </div>
+                                <div class="h-1.5 w-full bg-tavern-900 rounded-full flex mb-2 overflow-hidden shadow-inner">
+                                    <div class="h-full bg-amber-500 transition-all duration-1000" style="width: ${pctPub}%"></div>
+                                </div>
+                                <div class="h-1.5 w-full bg-tavern-900 rounded-full flex mb-3 overflow-hidden shadow-inner">
+                                    <div class="h-full bg-slate-400 transition-all duration-1000" style="width: ${pctOutra}%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-[11px] font-mono border-t border-tavern-800 pt-2">
+                                    <span class="text-slate-400">Vantagem/Atraso:</span>
+                                    <span class="font-bold flex items-center gap-1.5">${icon} ${textLabel}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    gapContainer.innerHTML = htmlBars;
+                }
+            }
+        }
+
+        function renderDatabaseTable() {
+            const tableBody = document.getElementById('db-table-body');
+            const infoText = document.getElementById('db-table-info');
+            const searchInput = document.getElementById('db-search');
+            const filterStatus = document.getElementById('db-filter-status');
+
+            if (!tableBody || !infoText) return;
+
+            const term = searchInput ? searchInput.value.toLowerCase() : "";
+            const statusFiltro = filterStatus ? filterStatus.value : "todos";
+            
+            const coletas = obterColetasDeduplicadas();
+            const ordenados = [...coletas].sort((a, b) => {
+                if (b.data !== a.data) return b.data.localeCompare(a.data);
+                return b.poder - a.poder;
+            });
+
+            const filtered = ordenados.filter(item => {
+                if (term && !item.nome.toLowerCase().includes(term)) return false;
+                
+                if (statusFiltro !== "todos") {
+                    const statusObj = processarMembroStatus(item.nome, item);
+                    if (statusFiltro === "on" && !statusObj.ativo) return false;
+                    if (statusFiltro === "off" && statusObj.ativo) return false;
+                }
+                return true;
+            });
+
+            tableBody.innerHTML = filtered.map(item => {
+                const statusObj = processarMembroStatus(item.nome, item);
+                const acaoBtn = isAdmin ? `
+                    <button onclick="deletarRegistro('${item.id || item.nome + '_' + item.data}')" class="text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 p-1.5 rounded transition-colors" title="Apagar Conta">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                ` : `<span class="text-tavern-600 cursor-not-allowed" title="Precisa da Chave do Bar"><i class="fa-solid fa-lock"></i></span>`;
+
+                return `
+                <tr class="hover:bg-tavern-900/30 transition-colors group">
+                    <td class="p-4 text-center border-r border-tavern-800/20">${acaoBtn}</td>
+                    <td class="p-4 font-mono text-slate-300">${formatarData(item.data)}</td>
+                    <td class="p-4 font-bold text-amber-200">
+                        <div class="flex items-center gap-2">
+                            ${statusObj.ativo ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]" title="Bebendo Agora (ON)"></span>' : '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_5px_#f43f5e]" title="Fora do Bar (OFF)"></span>'}
+                            ${item.nome}
+                        </div>
+                    </td>
+                    <td class="p-4 text-tavern-200"><span class="bg-tavern-900 border border-tavern-700/50 px-2 py-1 rounded text-[10px] font-black">${item.rank}</span></td>
+                    <td class="p-4 text-right font-mono text-white">${formatarNumero(item.poder)}</td>
+                    <td class="p-4 text-center font-mono text-blue-300">Lv ${item.nivel}</td>
+                    <td class="p-4 text-center">
+                        <span class="${item.offline == 0 ? 'text-slate-500' : 'text-orange-400 font-bold bg-orange-950/30 px-2 py-0.5 rounded'}">
+                            ${item.offline == 0 ? '-' : item.offline + ' d'}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center text-slate-400 font-mono text-[10px]">${item.localizacao || '-'}</td>
+                    <td class="p-4 text-emerald-400/80 font-mono text-[10px]">${formatarData(item.admissao)}</td>
+                    <td class="p-4 text-rose-400/80 font-mono text-[10px]">
+                        ${statusObj.ativo ? '-' : (statusObj.metodo === 'auto' ? 'Sumiu (Auto)' : formatarData(statusObj.dataDemissao))}
+                    </td>
+                </tr>`;
+            }).join('');
+
+            infoText.innerText = `Listando ${filtered.length} conta(s) preenchida(s)`;
+        }
+
+
+        function renderAtividadeIndividual() {
+            const tableBody = document.getElementById('individual-table-body');
+            if (!tableBody) return;
+
+            const coletas = obterColetasDeduplicadas();
+            const historicoPorMembro = {};
+            const mediasDiarias = {};
+
+            coletas.forEach(r => {
+                if (!mediasDiarias[r.data]) {
+                    const registrosDia = coletas.filter(x => x.data === r.data);
+                    const count = registrosDia.length;
+                    const somaPoder = registrosDia.reduce((acc, curr) => acc + Number(curr.poder || 0), 0);
+                    const somaDoacao = registrosDia.reduce((acc, curr) => acc + Number(curr.doacao || 0), 0);
+                    mediasDiarias[r.data] = {
+                        mediaPoder: count > 0 ? somaPoder / count : 0,
+                        mediaDoacao: count > 0 ? somaDoacao / count : 0
+                    };
+                }
+            });
+
+            coletas.forEach(r => {
+                if (!historicoPorMembro[r.nome]) {
+                    historicoPorMembro[r.nome] = { nome: r.nome, q1: 0, q2: 0, q3: 0, q4: 0, total: 0, ultimoReg: r };
+                }
+                
+                if (r.data > historicoPorMembro[r.nome].ultimoReg.data) {
+                    historicoPorMembro[r.nome].ultimoReg = r;
+                }
+
+                const medias = mediasDiarias[r.data];
+                const quad = calcularQuadrante(r.poder, r.doacao, medias.mediaPoder, medias.mediaDoacao);
+                historicoPorMembro[r.nome][`q${quad.num}`]++;
+                historicoPorMembro[r.nome].total++;
+            });
+
+            const consolidado = Object.values(historicoPorMembro).sort((a, b) => b.total - a.total || a.nome.localeCompare(b.nome));
+
+            tableBody.innerHTML = consolidado.map(item => {
+                const p1 = Math.round((item.q1 / item.total) * 100);
+                const p2 = Math.round((item.q2 / item.total) * 100);
+                const p3 = Math.round((item.q3 / item.total) * 100);
+                const p4 = Math.round((item.q4 / item.total) * 100);
+                
+                const statusObj = processarMembroStatus(item.nome, item.ultimoReg);
+                const statusLabel = statusObj.ativo ? 
+                    '<span class="bg-emerald-900/40 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded shadow-sm text-[9px] font-black uppercase tracking-widest"><i class="fa-solid fa-beer mr-1"></i> No Bar</span>' : 
+                    `<span class="bg-rose-900/40 text-rose-400 border border-rose-500/30 px-2 py-1 rounded shadow-sm text-[9px] font-black uppercase tracking-widest"><i class="fa-solid fa-door-open mr-1"></i> Fora</span>`;
+
+                let veredito = "";
+                let vereditoCor = "";
+                if (p1 >= 50) { veredito = "Mestre Cervejeiro"; vereditoCor = "text-emerald-400"; }
+                else if (p1 + p2 >= 60) { veredito = "Cliente Muito Fiel"; vereditoCor = "text-blue-400"; }
+                else if (p4 >= 50) { veredito = "Encostado no Balcão"; vereditoCor = "text-rose-400"; }
+                else { veredito = "Bebe Normal"; vereditoCor = "text-amber-400"; }
+
+                return `
+                <tr class="hover:bg-tavern-900/30 transition-colors">
+                    <td class="p-4 font-bold text-amber-200 border-r border-tavern-800/20">${item.nome}</td>
+                    <td class="p-4 text-center font-mono">
+                        <span class="block text-emerald-400 font-bold">${item.q1}x</span>
+                        <span class="block text-[9px] text-slate-500">${p1}%</span>
+                    </td>
+                    <td class="p-4 text-center font-mono">
+                        <span class="block text-blue-400 font-bold">${item.q2}x</span>
+                        <span class="block text-[9px] text-slate-500">${p2}%</span>
+                    </td>
+                    <td class="p-4 text-center font-mono">
+                        <span class="block text-orange-400 font-bold">${item.q3}x</span>
+                        <span class="block text-[9px] text-slate-500">${p3}%</span>
+                    </td>
+                    <td class="p-4 text-center font-mono">
+                        <span class="block text-rose-400 font-bold">${item.q4}x</span>
+                        <span class="block text-[9px] text-slate-500">${p4}%</span>
+                    </td>
+                    <td class="p-4 text-center font-black text-white text-sm bg-tavern-900/40 border-l border-r border-tavern-800/20">${item.total}</td>
+                    <td class="p-4 text-center">${statusLabel}</td>
+                    <td class="p-4 text-center font-accent text-[11px] font-bold uppercase tracking-wider ${vereditoCor}">${veredito}</td>
+                </tr>`;
+            }).join('');
+        }
+
+
+        function inicializarSimulador() {
+            const coletas = obterColetasDeduplicadas();
+            const dataRecenteAtivos = obterDataMaisRecenteGlobal();
+            const ativos = coletas.filter(r => processarMembroStatus(r.nome, r).ativo && r.data === dataRecenteAtivos);
+            
+            estadoSimulacao.membros = ativos.map(m => ({
+                id_sim: `real_${m.nome}`,
+                nome: m.nome,
+                poder: Number(m.poder),
+                rank: m.rank,
+                isReal: true
+            }));
+            
+            renderRosterSimulacao();
+        }
+
+        function renderRosterSimulacao() {
+            const container = document.getElementById('sim-roster-list-container');
+            if (!container) return;
+
+            let totalPoder = 0;
+            let addedPoder = 0;
+
+            const html = estadoSimulacao.membros.map(m => {
+                totalPoder += m.poder;
+                if (!m.isReal) addedPoder += m.poder;
+
+                const bgClass = m.isReal ? 'bg-tavern-950/60 border-tavern-700/50' : 'bg-emerald-950/30 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.1)]';
+                const tag = m.isReal ? '<span class="text-[8px] bg-tavern-800 text-slate-400 px-1 rounded uppercase">Real</span>' : '<span class="text-[8px] bg-emerald-700 text-white px-1 rounded uppercase animate-pulse">Virtual</span>';
+
+                return `
+                <div class="${bgClass} p-3 rounded-lg border flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-[11px] text-white truncate max-w-[100px] block" title="${m.nome}">${m.nome}</span>
+                            ${tag}
+                        </div>
+                        <span class="text-[10px] text-amber-400 font-mono block">${formatarPoderCompacto(m.poder)}</span>
+                    </div>
+                    <button onclick="removerGuerreiroSimulado('${m.id_sim}')" class="text-rose-400 hover:text-white hover:bg-rose-600 w-6 h-6 rounded flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-minus text-[10px]"></i>
+                    </button>
+                </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html || '<p class="text-slate-500 text-xs italic col-span-full">Bar vazio.</p>';
+
+            const count = estadoSimulacao.membros.length;
+            const avg = count > 0 ? Math.round(totalPoder / count) : 0;
+
+            document.getElementById('sim-roster-count').innerText = count;
+            document.getElementById('sim-roster-total-power').innerText = formatarPoderCompacto(totalPoder);
+            document.getElementById('sim-roster-avg-power').innerText = formatarPoderCompacto(avg);
+            document.getElementById('sim-roster-added-power').innerText = `+${formatarPoderCompacto(addedPoder)}`;
+        }
+
+        function adicionarGuerreiroSimulado() {
+            const nomeInput = document.getElementById('sim-virt-nome');
+            const poderInput = document.getElementById('sim-virt-poder');
+            
+            if (!nomeInput.value || !poderInput.value) {
+                showToast("Por favor, dê nome e poder para o novato virtual.");
+                return;
+            }
+
+            const novoId = `sim_${Date.now()}`;
+            estadoSimulacao.membros.unshift({
+                id_sim: novoId,
+                nome: nomeInput.value.trim(),
+                poder: Number(poderInput.value),
+                rank: 'R1',
+                isReal: false
+            });
+
+            nomeInput.value = "";
+            poderInput.value = "";
+            
+            renderRosterSimulacao();
+            showToast("Recruta virtual entrou no bar!");
+        }
+
+        function removerGuerreiroSimulado(idSim) {
+            estadoSimulacao.membros = estadoSimulacao.membros.filter(m => m.id_sim !== idSim);
+            renderRosterSimulacao();
+        }
+
+
+        function toggleFormModal(show) {
+            const modal = document.getElementById('modal-form-registro');
+            if (show && isAdmin) {
+                document.getElementById('registro-form').reset();
+                document.getElementById('form-id').value = "";
+                document.getElementById('form-data').value = new Date().toISOString().split('T')[0];
+                modal.classList.remove('hidden');
+            } else if (!show) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function salvarFormulario(event) {
+            event.preventDefault();
+            if (!isAdmin) return;
+
+            const novoReg = {
+                id: "local_" + Date.now(),
+                data: document.getElementById('form-data').value,
+                nome: document.getElementById('form-nome').value.trim(),
+                rank: document.getElementById('form-rank').value,
+                poder: Number(document.getElementById('form-poder').value),
+                nivel: Number(document.getElementById('form-nivel').value),
+                doacao: Number(document.getElementById('form-doacao').value),
+                offline: Number(document.getElementById('form-offline').value),
+                admissao: document.getElementById('form-admissao').value || "",
+                demissao: document.getElementById('form-demissao').value || ""
+            };
+
+            dbColetas.push(novoReg);
+            toggleFormModal(false);
+            showToast("Nova conta anotada no livro do bar!");
+            
+            recalcularPainelEstatistico();
+            renderDatabaseTable();
+            renderAtividadeIndividual();
+            processarEAtualizarNAP7();
+        }
+
+        function toggleDeleteModal(show, registroId = null) {
+            const modal = document.getElementById('modal-confirm-delete');
+            if (show && isAdmin) {
+                registroIdParaDeletar = registroId;
+                modal.classList.remove('hidden');
+                
+                const btnConfirm = document.getElementById('btn-confirm-delete-action');
+                btnConfirm.onclick = function() {
+                    if (registroIdParaDeletar) {
+                        dbColetas = dbColetas.filter(r => {
+                            const idAtual = r.id || (r.nome + '_' + r.data);
+                            return idAtual !== registroIdParaDeletar;
+                        });
+                        modal.classList.add('hidden');
+                        registroIdParaDeletar = null;
+                        showToast("Conta rasgada e jogada no fogo.");
+                        
+                        recalcularPainelEstatistico();
+                        renderDatabaseTable();
+                        renderAtividadeIndividual();
+                        processarEAtualizarNAP7();
+                    }
+                };
+            } else if (!show) {
+                modal.classList.add('hidden');
+                registroIdParaDeletar = null;
+            }
+        }
+
+        function deletarRegistro(id) {
+            toggleDeleteModal(true, id);
+        }
+
+        function renderizarEventos() {
+            const container = document.getElementById('lista-eventos-container');
+            if (!container) return;
+
+            if (dbEventos.length === 0) {
+                container.innerHTML = `
+                <div class="py-12 flex flex-col items-center justify-center text-center space-y-4 bg-tavern-950/40 rounded-xl border border-tavern-800 border-dashed">
+                    <i class="fa-solid fa-mug-hot text-tavern-700 text-3xl"></i>
+                    <p class="text-slate-500 text-xs uppercase tracking-widest font-bold">Nenhuma rodada agendada</p>
+                </div>`;
+                return;
+            }
+
+            const hoje = new Date();
+            dbEventos.sort((a, b) => new Date(a.horario) - new Date(b.horario));
+
+            container.innerHTML = dbEventos.map(evt => {
+                const dEvt = new Date(evt.horario);
+                const isPassado = dEvt < hoje;
+                const statusStr = isPassado ? "Finalizada" : "Próxima Rodada";
+                const bgSt = isPassado ? "bg-tavern-900/60 border-tavern-700 opacity-60" : "bg-gradient-to-r from-amber-950/40 to-tavern-900 border-amber-500/50 amber-glow";
+                
+                const deleteBtn = isAdmin ? `
+                    <button onclick="excluirEvento('${evt.id}')" class="text-rose-500 hover:text-rose-300 ml-4 transition-colors" title="Cancelar Rodada">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                ` : "";
+
+                return `
+                <div class="p-5 rounded-xl border flex items-center justify-between ${bgSt} transition-all">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-black/40 p-3 rounded-lg border border-tavern-700/50 text-center min-w-[70px]">
+                            <span class="block text-xs text-amber-500 font-black uppercase tracking-widest">${dEvt.toLocaleDateString('pt-PT', {month:'short'})}</span>
+                            <span class="block text-xl font-mono text-white font-bold">${dEvt.getDate()}</span>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-accent font-black text-white uppercase tracking-wider mb-1">${evt.nome}</h4>
+                            <p class="text-[10px] text-slate-400 font-mono flex items-center gap-2">
+                                <i class="fa-regular fa-clock text-amber-500/70"></i> ${dEvt.toLocaleTimeString('pt-PT', {hour:'2-digit', minute:'2-digit'})}
+                                <span class="mx-1 opacity-30">|</span>
+                                <span class="${isPassado ? 'text-slate-500' : 'text-emerald-400 font-bold'}">${statusStr}</span>
+                            </p>
+                        </div>
+                    </div>
+                    ${deleteBtn}
+                </div>
+                `;
+            }).join('');
+        }
+
+        function toggleEventoModal(show) {
+            const modal = document.getElementById('modal-form-evento');
+            if (show && isAdmin) {
+                document.getElementById('evt-nome').value = "";
+                document.getElementById('evt-horario').value = "";
+                modal.classList.remove('hidden');
+            } else if (!show) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function salvarNovoEvento(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            
+            const novoEvt = {
+                id: 'evt_' + Date.now(),
+                nome: document.getElementById('evt-nome').value.trim(),
+                horario: document.getElementById('evt-horario').value
+            };
+            
+            dbEventos.push(novoEvt);
+            localStorage.setItem('PUB_dbEventos', JSON.stringify(dbEventos));
+            
+            toggleEventoModal(false);
+            renderizarEventos();
+            showToast("Convite para rodada gritado para o bar!");
+        }
+
+        function excluirEvento(id) {
+            if (!isAdmin) return;
+            dbEventos = dbEventos.filter(e => e.id !== id);
+            localStorage.setItem('PUB_dbEventos', JSON.stringify(dbEventos));
+            renderizarEventos();
+            showToast("Evento cancelado. Bar fechado.");
+        }
+
+        function exportarDados() {
+            if (!isAdmin) return;
+            
+            const objExport = {
+                coletas: dbColetas,
+                eventos: dbEventos,
+                aliancas: dbAliancas
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(objExport, null, 4));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `pub_bar_consolidado_${new Date().getTime()}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            showToast("Barril de dados rolado! Faça upload para o repositório (infos.json).");
+        }
+
+    </script>
+</body>
+</html>
