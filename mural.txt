@@ -1,18 +1,36 @@
 # ENGLISH
 
-ALLIES: BAR | MAD | sCK | ARK | UAE | SEA | NXS | BaR
+NAP5: BAR | MAD | sCK | ARK | PUB
+ALLIES: BAR | MAD
+NON-AGGRESSION: NXS | UAE
 
-Only **Sanctuary 10** and **Forward Outposts** may be contested until further notice!
+​Individual weekly contribution goal: 50,000
+(The goal resets every Sunday)
 
-Individual weekly contribution target: **50,000**
-(Target resets every Sunday)
+​BEAR TRAP -> https://youtu.be/MTmbRdDwprk?si=0gapK2ccsPMRhvW5
+​Rally Leader: Use your 3 strongest damage heroes. May include Jabel.
+​Joining Rallies: Only the 1st hero matters.
+1st Slot Priority: Chenko > Yeonwoo > Amadeus > Hilde > Amane > Marlin > Zoe
+Avoid 1st Slot: Helga, Jabel, Seth, Forrest, Edwin, Olive, or gathering heroes.
+2nd & 3rd Slots: Any heroes (march capacity only).
+
+​Please refrain from gathering in the wild while the All Out event is still active. It’s safer to use alliance gathering nodes to avoid unnecessary attacks.
 
 
 # PORTUGUESE
 
-ALIADOS: BAR | MAD | sCK | ARK | UAE | SEA | NXS | BaR
-
-Apenas o **Santuário 10** e os **Postos Avançados** podem ser contestados até novo aviso!
+NAP5: BAR | MAD | sCK | ARK | PUB
+ALIADOS: BAR | MAD
+NÃO-AGRESSÃO: NXS | UAE
 
 Meta semanal individual de contribuição: **50.000**
 (A meta é reiniciada todo domingo)
+
+BEAR TRAP -> https://youtu.be/MTmbRdDwprk?si=0gapK2ccsPMRhvW5
+Líder de Rally: Use seus 3 heróis de dano mais fortes. Pode incluir o Jabel.
+​Entrando em Rallies: Apenas o 1º herói importa.
+Prioridade para o 1º Slot: Chenko > Yeonwoo > Amadeus > Hilde > Amane > Marlin > Zoe
+Evite no 1º Slot: Helga, Jabel, Seth, Forrest, Edwin, Olive ou heróis de coleta.
+2º e 3º Slots: Quaisquer heróis (apenas para capacidade de marcha).
+
+​Por favor, evite coletar no mapa enquanto o evento All Out estiver ativo. É mais seguro usar os pontos de coleta da aliança para evitar ataques desnecessários.
